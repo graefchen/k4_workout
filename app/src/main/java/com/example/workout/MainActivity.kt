@@ -7,11 +7,22 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import com.example.workout.Activity.ActivityIn
+import com.example.workout.Activity.ActivityChoose
 import com.example.workout.ui.theme.WorkoutTheme
+
+// Main Activity
+// Either in an Workout of choosing an workout
+enum class ACTIVITY {
+    WORKOUT_IN,
+    WORKOUT_CHOOSE
+}
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,7 +31,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             WorkoutTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
+                    CurrentScreen(
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -30,17 +41,23 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(modifier: Modifier = Modifier) {
-    Text(
-        text = "Time for a Workout!!!",
-        modifier = modifier
-    )
-}
+fun CurrentScreen(modifier: Modifier) {
+    var currentActivity by remember { mutableStateOf(ACTIVITY.WORKOUT_CHOOSE) }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    WorkoutTheme {
-        Greeting()
+    when (currentActivity) {
+        ACTIVITY.WORKOUT_CHOOSE -> ActivityChoose(onWorkoutChosen = {
+            currentActivity = ACTIVITY.WORKOUT_IN
+        })
+        ACTIVITY.WORKOUT_IN -> ActivityIn(onWorkoutFinished = {
+            currentActivity = ACTIVITY.WORKOUT_CHOOSE
+        })
     }
 }
+
+//@Preview(showBackground = true, showSystemUi = true)
+//@Composable
+//fun Preview() {
+//    WorkoutTheme {
+//        CurrentScreen(modifier = Modifier)
+//    }
+//}
