@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -63,7 +65,9 @@ fun ActivityChoose(onWorkoutChosen: () -> Unit) {
                     text = "No Workout selected"
                 )
             } else {
-                LazyColumn {
+                // I could not get these stupid scrolling to work
+                // only with this here ... need to check more studd later
+                LazyColumn(modifier = Modifier.sizeIn(maxHeight = 400.dp)) {
                     var index = 0
                     items(workoutList) { workout ->
                         AddedWorkout(workout, index, onRemove = { i ->
@@ -131,7 +135,6 @@ fun AddWorkout(workout: Workout, onAdded: () -> Unit) {
         // Icon Button looks SOOOOOOO good (much better than other options)
         IconButton(onClick = {
             WorkoutSingleton.addWorkout(workout)
-            Log.i("WorkoutApp", "Added workout: $workout")
             onAdded()
         }) { Icon(Icons.Outlined.Add, "Small floating action button.") }
     }
