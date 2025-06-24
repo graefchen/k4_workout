@@ -1,17 +1,11 @@
 package com.example.workout.Activity
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Clear
@@ -42,57 +36,54 @@ fun ActivityChoose(onWorkoutChosen: () -> Unit) {
     // we needed to have the following two lines and casting the mutable list
     // into a list ...
     var list = WorkoutSingleton.getList().toList()
-    var workoutList by remember { mutableStateOf(list)}
+    var workoutList by remember { mutableStateOf(list) }
 
     var somethingSelected by remember { mutableStateOf(false) }
 
     // all the available Workouts
     var availableWorkouts = WorkoutList().list
 
-    Box(modifier = Modifier.fillMaxWidth()) {
-        Column {
+    // making that ****ing thing scrollable
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .verticalScroll(rememberScrollState())) {
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            fontSize = 5.em,
+            textAlign = TextAlign.Center,
+            text = "Current Workouts:"
+        )
+        HorizontalDivider(color = Color.Blue, thickness = 1.dp)
+        if (!somethingSelected) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                fontSize = 5.em,
                 textAlign = TextAlign.Center,
-                text = "Current Workouts:"
+                text = "No Workout selected"
             )
-            HorizontalDivider(color = Color.Blue, thickness = 1.dp)
-            if (!somethingSelected) {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center,
-                    text = "No Workout selected"
-                )
-            } else {
-                // I could not get these stupid scrolling to work
-                // only with this here ... need to check more studd later
-                LazyColumn(modifier = Modifier.sizeIn(maxHeight = 400.dp)) {
-                    var index = 0
-                    items(workoutList) { workout ->
-                        AddedWorkout(workout, index, onRemove = { i ->
-                            WorkoutSingleton.removeWorkoutAt(i)
-                            workoutList = WorkoutSingleton.getList().toList()
-                            if (WorkoutSingleton.isEmpty()) somethingSelected = false
-                        })
-                        index = index + 1
-                    }
-                }
+        } else {
+            var index = 0
+            workoutList.forEach { workout ->
+                AddedWorkout(workout, index, onRemove = { i ->
+                    WorkoutSingleton.removeWorkoutAt(i)
+                    workoutList = WorkoutSingleton.getList().toList()
+                    if (WorkoutSingleton.isEmpty()) somethingSelected = false
+                })
+                index = index + 1
             }
-            HorizontalDivider(color = Color.Blue, thickness = 1.dp)
-            LazyColumn {
-                items(availableWorkouts) { workout ->
-                    AddWorkout(workout, onAdded = {
-                        workoutList = WorkoutSingleton.getList().toList()
-                        if (!somethingSelected) somethingSelected = true
-                    })
-                }
+        }
+        HorizontalDivider(color = Color.Blue, thickness = 1.dp)
+        Column {
+            availableWorkouts.forEach { workout ->
+                AddWorkout(workout, onAdded = {
+                    workoutList = WorkoutSingleton.getList().toList()
+                    if (!somethingSelected) somethingSelected = true
+                })
             }
-            Button(onClick = {
-                if (!WorkoutSingleton.isEmpty()) onWorkoutChosen()
-            }) {
-                Text(text = "Start Workout")
-            }
+        }
+        Button(onClick = {
+            if (!WorkoutSingleton.isEmpty()) onWorkoutChosen()
+        }) {
+            Text(text = "Start Workout")
         }
         // This is a normal Floating Action Bar
         // Note: a Bottom App Bar might be better for a non MVP App

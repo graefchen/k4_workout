@@ -4,15 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.rememberScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,12 +15,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.ModifierInfo
-import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
 import androidx.compose.ui.unit.dp
-import com.example.workout.Activity.ActivityIn
 import com.example.workout.Activity.ActivityChoose
+import com.example.workout.Activity.ActivityIn
 import com.example.workout.ui.theme.WorkoutTheme
 
 // Main Activity
@@ -42,16 +34,25 @@ class MainActivity : ComponentActivity() {
         setContent {
             WorkoutTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    // Note: For some reasons this Box can not hande the
-                    // "fillMaxSize" function of the Modifier...
-                    // that is why we need to add "fillMaxSize" on **all**
-                    // other Composable Objects further down in the Tree...
-                    Box(modifier = Modifier.padding(innerPadding).padding(5.dp)) {
-                        CurrentScreen()
-                    }
+                    Container(innerPadding)
                 }
             }
         }
+    }
+}
+
+@Composable
+fun Container(innerPadding: PaddingValues) {
+    // Note: For some reasons this Box can not hande the
+    // "fillMaxSize" function of the Modifier...
+    // that is why we need to add "fillMaxSize" on **all**
+    // other Composable Objects further down in the Tree...
+    Box(
+        modifier = Modifier
+            .padding(innerPadding)
+            .padding(5.dp)
+    ) {
+        CurrentScreen()
     }
 }
 
@@ -61,22 +62,15 @@ fun CurrentScreen() {
 
     // Note: it seems like that this is not working ... for whatever reason ...
     // not understando
-    Column(modifier = Modifier.nestedScroll(rememberNestedScrollInteropConnection())) {
-        when (currentActivity) {
-            ACTIVITY.WORKOUT_CHOOSE -> ActivityChoose(onWorkoutChosen = {
-                currentActivity = ACTIVITY.WORKOUT_IN
-            })
-            ACTIVITY.WORKOUT_IN -> ActivityIn(onWorkoutFinished = {
+    when (currentActivity) {
+        ACTIVITY.WORKOUT_CHOOSE -> {
+            ActivityChoose(onWorkoutChosen = { currentActivity = ACTIVITY.WORKOUT_IN })
+        }
+
+        ACTIVITY.WORKOUT_IN -> {
+            ActivityIn(onWorkoutFinished = {
                 currentActivity = ACTIVITY.WORKOUT_CHOOSE
             })
         }
     }
 }
-
-//@Preview(showBackground = true, showSystemUi = true)
-//@Composable
-//fun Preview() {
-//    WorkoutTheme {
-//        CurrentScreen(modifier = Modifier)
-//    }
-//}
