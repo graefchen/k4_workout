@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -13,6 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.example.workout.Activity.ActivityIn
 import com.example.workout.Activity.ActivityChoose
 import com.example.workout.ui.theme.WorkoutTheme
@@ -30,10 +32,14 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             WorkoutTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    CurrentScreen(
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                Scaffold() { innerPadding ->
+                    // Note: For some reasons this Box can not hande the
+                    // "fillMaxSize" function of the Modifier...
+                    // that is why we need to add "fillMaxSize" on **all**
+                    // other Composable Objects further down in the Tree...
+                    Box(modifier = Modifier.padding(innerPadding).padding(5.dp)) {
+                        CurrentScreen()
+                    }
                 }
             }
         }
@@ -41,7 +47,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun CurrentScreen(modifier: Modifier) {
+fun CurrentScreen() {
     var currentActivity by remember { mutableStateOf(ACTIVITY.WORKOUT_CHOOSE) }
 
     when (currentActivity) {

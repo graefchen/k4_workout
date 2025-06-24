@@ -6,7 +6,16 @@ Eine einfache [HIIT](https://en.wikipedia.org/wiki/High-intensity_interval_train
 
 ## Funktionale Anforderungen
 
+- Übungen anzeigen: Jede Übung enthält eine Textbeschreibung und ein Bild und die Reihenfolge der Übungen kann festgelegt oder zufällig sein.
+- Pausen zwischen den Übungen: Die verbleibende Zeit wird als Countdown angezeigt.
+- Soundeffekte zur Orientierung: Ein Signalton kündigt den Start und das Ende jeder Übung an und ein anderer Sound signalisiert den Beginn und das Ende der Pausen.
+- Fortschrittsanzeige: Erfüllte Workouts werden gespeichert und User sehen z.B. mit einem Forschrittsbalken, wie viele Übungen sie bereits abgeschlossen haben.
+
 ## Wichtige Datein
+
+## Bilder
+
+Hier kommen die Bilder hin.
 
 ## APK
 
@@ -17,3 +26,6 @@ Eine einfache [HIIT](https://en.wikipedia.org/wiki/High-intensity_interval_train
 - https://en.wikipedia.org/wiki/Singleton_pattern
 - https://www.geeksforgeeks.org/kotlin/kotlin-hashmap/
 - https://developer.android.com/codelabs/basic-android-kotlin-compose-add-images#3
+- https://developer.android.com/develop/ui/compose/modifiers
+- https://developer.android.com/develop/ui/compose/lists
+- https://developer.android.com/develop/ui/compose/layouts/flow

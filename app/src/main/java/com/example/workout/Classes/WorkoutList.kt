@@ -2,8 +2,8 @@ package com.example.workout.Classes
 
 class WorkoutList {
     // TODO: Add more workouts
-    var list = HashMap<String, Workout> ()
-    init {
-        list.put("...", Workout("...","...",15))
-    }
+    var list = listOf<Workout>(
+        Workout("Push ups", "", 30),
+        Workout("Sit ups", "", 30),
+    )
 }
