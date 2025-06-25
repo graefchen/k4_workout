@@ -29,3 +29,6 @@ Hier kommen die Bilder hin.
 - https://developer.android.com/develop/ui/compose/modifiers
 - https://developer.android.com/develop/ui/compose/lists
 - https://developer.android.com/develop/ui/compose/layouts/flow
+- https://developer.android.com/develop/ui/compose/components/progress
+- https://developer.android.com/codelabs/basic-android-kotlin-compose-add-images
+- 

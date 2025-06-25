@@ -16,8 +16,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.workout.Activity.ActivityChoose
-import com.example.workout.Activity.ActivityIn
+import com.example.workout.activity.ActivityChoose
+import com.example.workout.activity.ActivityIn
 import com.example.workout.ui.theme.WorkoutTheme
 
 // Main Activity
@@ -60,8 +60,6 @@ fun Container(innerPadding: PaddingValues) {
 fun CurrentScreen() {
     var currentActivity by remember { mutableStateOf(ACTIVITY.WORKOUT_CHOOSE) }
 
-    // Note: it seems like that this is not working ... for whatever reason ...
-    // not understando
     when (currentActivity) {
         ACTIVITY.WORKOUT_CHOOSE -> {
             ActivityChoose(onWorkoutChosen = { currentActivity = ACTIVITY.WORKOUT_IN })
