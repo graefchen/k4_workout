@@ -2,8 +2,11 @@ package com.example.workout.components
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -37,11 +40,13 @@ fun SportPlayer(
     duration: Float,
     onFinished: () -> Unit
 ) {
+    var currentDuration by remember { mutableFloatStateOf(0f) }
     var image = painterResource(id)
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(50.dp),
+            .padding(10.dp),
         contentAlignment = Alignment.Center
     ) {
         Column {
@@ -50,11 +55,23 @@ fun SportPlayer(
                 text = name,
                 textAlign = TextAlign.Center,
                 fontSize = 7.em,
+                lineHeight = 2.em,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.fillMaxWidth()
             )
             Text(text = description, textAlign = TextAlign.Center)
-            DurationBar(duration = duration, onFinished)
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = "00:${currentDuration.toInt().toString().padStart(2, '0')}")
+                Spacer(Modifier.weight(1f))
+                DurationBar(duration = duration, onFinished, { progress ->
+                    currentDuration = progress * duration
+                })
+                Spacer(Modifier.weight(1f))
+                Text(text = "00:${duration.toInt()}")
+            }
             Text(
                 text = finished,
                 modifier = Modifier
@@ -68,7 +85,7 @@ fun SportPlayer(
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun DurationBar(duration: Float, onFinished: () -> Unit) {
+fun DurationBar(duration: Float, onFinished: () -> Unit, updateDuration: (Float) -> Unit) {
     var currentProgress by remember { mutableFloatStateOf(0f) }
     val scope = rememberCoroutineScope()
 
@@ -76,13 +93,16 @@ fun DurationBar(duration: Float, onFinished: () -> Unit) {
     scope.launch {
         loadProgress(duration, updateProgress = { progress ->
             currentProgress = progress
+            updateDuration(progress)
         })
         // it seems like a problem occurs here ...
         // we MUST check for it here or some other problem occurs here
         if (!WorkoutSingleton.isFinished()) onFinished()
     }
 
-    LinearProgressIndicator(progress = { currentProgress }, modifier = Modifier.fillMaxWidth())
+    // There appears to be a small big in here so that the bar
+    // has a small dot at the end ...
+    LinearProgressIndicator(progress = { currentProgress })
 }
 
 suspend fun loadProgress(maxDuration: Float, updateProgress: (Float) -> Unit) {

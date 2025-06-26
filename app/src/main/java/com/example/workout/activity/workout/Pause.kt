@@ -10,7 +10,7 @@ import com.example.workout.data.WorkoutSingleton
 fun WorkoutPause(currentWORKOUT: Workout, onPauseFinished: () -> Unit) {
     SportPlayer(
         currentWORKOUT.id,
-        "Pause\n\nNext: ${currentWORKOUT.name}",
+        "Pause\nNext: ${currentWORKOUT.name}",
         currentWORKOUT.description,
         "Finished ${WorkoutSingleton.currentWorkout} of ${WorkoutSingleton.workouts.size}",
         5f,

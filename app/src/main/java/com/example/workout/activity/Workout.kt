@@ -36,6 +36,9 @@ fun ActivityIn(onWorkoutFinished: () -> Unit) {
             currentWorkout,
             onWorkoutPreparationFinished = {
                 currentWorkoutState = WORKOUT.ACTIVE
+            },
+            onWorkoutPreparationCanceled = {
+                onWorkoutFinished()
             }
         )
 
