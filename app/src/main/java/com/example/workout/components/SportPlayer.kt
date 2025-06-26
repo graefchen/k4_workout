@@ -33,6 +33,7 @@ fun SportPlayer(
     id: Int,
     name: String,
     description: String,
+    finished: String,
     duration: Float,
     onFinished: () -> Unit
 ) {
@@ -54,6 +55,13 @@ fun SportPlayer(
             )
             Text(text = description, textAlign = TextAlign.Center)
             DurationBar(duration = duration, onFinished)
+            Text(
+                text = finished,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp),
+                textAlign = TextAlign.Center
+            )
         }
     }
 }
