@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -54,22 +53,21 @@ fun SportPlayer(
             Text(
                 text = name,
                 textAlign = TextAlign.Center,
-                fontSize = 7.em,
+                fontSize = 5.em,
                 lineHeight = 2.em,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.fillMaxWidth()
             )
-            Text(text = description, textAlign = TextAlign.Center)
+            Text(text = description)
+            DurationBar(duration = duration, onFinished, updateDuration = { progress ->
+                currentDuration = progress * duration
+            })
             Row(
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(text = "00:${currentDuration.toInt().toString().padStart(2, '0')}")
-                Spacer(Modifier.weight(1f))
-                DurationBar(duration = duration, onFinished, { progress ->
-                    currentDuration = progress * duration
-                })
-                Spacer(Modifier.weight(1f))
                 Text(text = "00:${duration.toInt()}")
             }
             Text(
@@ -102,7 +100,7 @@ fun DurationBar(duration: Float, onFinished: () -> Unit, updateDuration: (Float)
 
     // There appears to be a small big in here so that the bar
     // has a small dot at the end ...
-    LinearProgressIndicator(progress = { currentProgress })
+    LinearProgressIndicator(progress = { currentProgress }, modifier = Modifier.fillMaxWidth())
 }
 
 suspend fun loadProgress(maxDuration: Float, updateProgress: (Float) -> Unit) {
